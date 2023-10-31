@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+<body>
+<h1>회원목록</h1>
+<a href="/">메인화면</a>
+<table>
+    <tr>
+        <th>아이디</th>
+        <th>닉네임</th>
+    </tr>
+    <tbody id="userList">
+
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/api/users",
+            success: function (data) {
+                // 서버로부터 데이터 가져오기 성공 시, 데이터를 화면에 표시
+                displayUsers(data);
+            },
+            error: function () {
+                console.error("데이터를 가져오는 동안 오류가 발생했습니다.");
+            }
+        });
+    });
+
+    function displayUsers(users) {
+        var userList = $("#userList");
+        userList.empty();
+
+        users.forEach(function (user) {
+            var row = $("<tr>"); // 새로운 행 추가
+            row.append("<td class='center'>" + user.username + "</td>"); // 사용자 이름 열 추가
+            row.append("<td class='center'>" + user.nickname + "</td>"); // 닉네임 열 추가
+            userList.append(row); // 행을 테이블에 추가
+        });
+    }
+
+</script>
+</body>
+</html>

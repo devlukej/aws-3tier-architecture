@@ -1,0 +1,36 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/ # Thymeleaf ??? ???? ??
+    suffix: .html # ??? ?? ???
+    mode: HTML5 # HTML5 ??
+    cache: false # ??? ?? ?? (?? ????? false? ???? ?? ????)
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/board
+    username: root
+    password: root
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+      format_sql: true
+      ddl-auto: update
+    defer-datasource-initialization: true
+  http:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+    h2:
+      console:
+        enabled: true
+server:
+  port: 8080
+

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<HTML>
+<head>
+    <title>회원가입</title>
+<body>
+<div class="container">
+    <h1>환영합니다</h1>
+    <p id="message">아래 버튼을 클릭하여 회원가입 페이지로 이동하세요.</p>
+    <a href="/signup">회원가입</a>
+    <a href="/list">회원목록</a>
+</div>
+<script>
+    // URL에서 message 매개변수 읽기
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+
+    if (message) {
+        document.getElementById("message").textContent = message;
+    }
+</script>
+
+</body>
+</HTML>
