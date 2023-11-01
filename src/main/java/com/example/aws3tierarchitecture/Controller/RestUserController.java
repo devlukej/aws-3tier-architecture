@@ -16,7 +16,6 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
 public class RestUserController {
 
     private final UserService userService;
@@ -28,7 +27,7 @@ public class RestUserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     public ResponseEntity<String> signup(@RequestBody UserEntity user) {
         // 사용자 이름(username) 및 닉네임(nickname) 중복 검사
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -44,7 +43,7 @@ public class RestUserController {
         return new ResponseEntity<>("회원가입 성공!", HttpStatus.OK);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     public List<UserEntity> getAllUsers() {
 
         return userService.getAllUsers();
