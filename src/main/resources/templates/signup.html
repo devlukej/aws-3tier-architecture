@@ -9,13 +9,39 @@
             font-family: Arial, sans-serif;
         }
 
+        h2 {
+            display: flex;
+            justify-content: center;
+        }
+
+        html {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
         .container {
-            width: 30%;
-            margin: 0 auto;
+            width: 500px;
+        }
+
+        .text-box {
+            width: 100%;
+        }
+
+        label {
+            width: 50%;
         }
 
         .form-group {
             margin-bottom: 10px;
+            display: flex;
+        }
+
+        button {
+            width: 100%;
+        }
+        .back-btn {
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -24,20 +50,24 @@
     <h2>회원가입</h2>
     <form id="signupForm">
         <div class="form-group">
-            <label for="username">아이디:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="username">아이디</label>
+            <input class="text-box" type="text" id="username" name="username" required>
         </div>
         <div class="form-group">
-            <label for="password">비밀번호:</label>
-            <input type="password" id="password" name="password" required>
+            <label for="password">비밀번호</label>
+            <input class="text-box" type="password" id="password" name="password" required>
         </div>
         <div class="form-group">
-            <label for="nickname">닉네임:</label>
-            <input type="text" id="nickname" name="nickname" required>
+            <label for="nickname">닉네임</label>
+            <input class="text-box" type="text" id="nickname" name="nickname" required>
         </div>
         <button type="submit">가입</button>
     </form>
-    <a href="/">메인화면</a>
+    <div class="back-btn">
+        <a href="/">
+            <button>메인화면</button>
+        </a>
+    </div>
 </div>
 <p id="message"></p>
 <script>
