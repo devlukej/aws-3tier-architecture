@@ -2,17 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>DoDo Express</title>
     <style>
 
+        body {
+            display: flex;
+            justify-content: center;
+        }
+        .title {
+            margin: 0 20px;
+        }
+        .search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            margin: 0 20px;
+        }
+        .size {
+            width: 100%;
+        }
+        .search-btn {
+            width: 30%;
+        }
+        .signup {
+            margin: 0 20px;
+        }
+        .signup-txt {
+            display: flex;
+            justify-content: center;
+        }
+        .bucket {
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-<div>
-    <H1>MZCExpress</H1>
+<div class="title">
+    <H1>DoDo Express</H1>
 </div>
-<div>
-    <input type="l">
+<div class="search">
+    <input class="size" name="noticeTitle" id="keyword" type="text">
+    <button class="search-btn">검색</button>
+</div>
+<div class="signup">
+    <p class="signup-txt">환영합니다!</p>
+    <a href="/signup">회원가입</a>
+    <a href="/signup">로그인</a>
+</div>
+<div class="bucket">
+    <a href="/signup">장바구니</a>
 </div>
 </body>
 </html>

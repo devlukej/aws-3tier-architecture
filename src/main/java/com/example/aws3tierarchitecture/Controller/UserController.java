@@ -15,7 +15,7 @@ public class UserController {
     @GetMapping("/")
     public String dispMain() {
 
-        return "index.html";
+        return "index";
     }
 
     @GetMapping("/signup")
