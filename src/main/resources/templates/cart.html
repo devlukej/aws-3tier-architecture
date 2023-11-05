@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DoDo Express</title>
+    <style>
+        .product {
+            display: flex;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+
+        .sub {
+            text-align: center;
+            margin-right: 20px;
+            width: 200px;
+        }
+
+        .third {
+            text-align: center;
+            margin-right: 20px;
+            width: 200px;
+        }
+
+        .forth {
+            text-align: center;
+            margin-right: 20px;
+            width: 200px;
+        }
+
+        .fifth {
+            text-align: center;
+            width: 200px;
+        }
+
+        .total {
+            display: flex;
+            align-items: center;
+        }
+
+        .box {
+
+        }
+
+        #cartItems {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header').load('header.html');
+        });
+    </script>
+</head>
+<body>
+<!-- HEADER -->
+<div th:insert="header.html" class="header"></div>
+
+<div id="header"></div>
+
+<div class="box">
+    <h1 style="display: flex; justify-content: center; align-items: center;">장바구니</h1>
+    <div id="cartItems"></div>
+    <div class="total" style="display: flex; justify-content: center; align-items: center;">
+        <h2>합계 : </h2>
+        <p id="totalElement"></p>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button>결제하기</button>
+    </div>
+</div>
+<script>
+    fetch('/api/cart/all')
+        .then(response => response.json())
+        .then(cartItems => {
+            const cartItemsElement = document.getElementById('cartItems');
+            const totalElement = document.getElementById('totalElement');
+            let total = 0;
+
+            cartItems.forEach(cartItem => {
+
+                const cartItemElement = document.createElement('div');
+                cartItemElement.classList.add('product');
+
+                // 체크 박스 생성
+                const checkboxElement = document.createElement('input');
+                checkboxElement.type = 'checkbox';
+                checkboxElement.name = 'selectedItem';
+                checkboxElement.value = cartItem.id;
+                cartItemElement.appendChild(checkboxElement);
+
+                const imgElement = document.createElement('img');
+                imgElement.src = cartItem.productImage;
+                cartItemElement.appendChild(imgElement);
+
+                const subDiv = document.createElement('div');
+                subDiv.classList.add('sub');
+
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = cartItem.productName;
+                subDiv.appendChild(titleElement);
+
+                const manualElement = document.createElement('p');
+                manualElement.textContent = cartItem.productManual;
+                subDiv.appendChild(manualElement);
+
+                cartItemElement.appendChild(subDiv);
+
+                const thirdDiv = document.createElement('div');
+                thirdDiv.classList.add('third');
+
+                const CountTitleElement = document.createElement('h2');
+                CountTitleElement.textContent = '수량';
+                thirdDiv.appendChild(CountTitleElement);
+
+
+                // Count select box를 생성하고 option을 추가합니다.
+                const countSelectElement = document.createElement('select');
+
+                // 1부터 10까지의 숫자를 option으로 추가합니다.
+                for (let i = 1; i <= 10; i++) {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = i;
+                    optionElement.textContent = i;
+
+                    // 원하는 숫자가 count 값과 일치하면 해당 option을 선택합니다.
+                    if (i === cartItem.count) {
+                        optionElement.selected = true;
+                    }
+
+                    countSelectElement.appendChild(optionElement);
+                }
+
+                thirdDiv.appendChild(countSelectElement);
+                cartItemElement.appendChild(thirdDiv);
+
+                const forthDiv = document.createElement('div');
+                forthDiv.classList.add('forth');
+
+                const priceTitleElement = document.createElement('h2');
+                priceTitleElement.textContent = '가격';
+                forthDiv.appendChild(priceTitleElement);
+
+                const priceElement = document.createElement('p');
+
+                function addCommas(number) {
+                    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+                const formattedPrice = `￦${addCommas(cartItem.price)}`;
+                priceElement.textContent = formattedPrice;
+                forthDiv.appendChild(priceElement);
+                cartItemElement.appendChild(forthDiv);
+
+                const fifthDiv = document.createElement('div');
+                fifthDiv.classList.add('fifth');
+
+                const deliveryTitleElement = document.createElement('h2');
+                deliveryTitleElement.textContent = '배송비';
+                fifthDiv.appendChild(deliveryTitleElement);
+
+                const deliveryElement = document.createElement('p');
+                deliveryElement.textContent = '무료배송';
+                fifthDiv.appendChild(deliveryElement);
+
+
+                cartItemElement.appendChild(fifthDiv);
+
+
+                // 체크 박스 상태가 변경될 때마다 합계 계산을 업데이트
+                checkboxElement.addEventListener('change', () => {
+                    if (checkboxElement.checked) {
+                        total += cartItem.price * cartItem.count;
+                    } else {
+                        total -= cartItem.price * cartItem.count;
+                    }
+                    totalElement.textContent = `￦${addCommas(total)}`;
+                });
+
+                // 페이지 로딩 시 선택된 체크 박스가 체크되어 있으면 합계 계산에 추가
+                if (checkboxElement.checked) {
+                    total += cartItem.price * cartItem.count;
+                }
+
+                // 수량 선택 상자의 변경 이벤트를 처리하여 합계 업데이트
+                countSelectElement.addEventListener('change', () => {
+                    const newCount = parseInt(countSelectElement.value);
+                    total += (newCount - cartItem.count) * cartItem.price;
+                    cartItem.count = newCount;
+                    totalElement.textContent = `￦${addCommas(total)}`;
+                });
+
+                cartItemsElement.appendChild(cartItemElement);
+
+            });
+
+            totalElement.textContent = `￦${addCommas(total)}`;
+
+        })
+        .catch(error => {
+            console.error('장바구니 목록을 불러오는 중 오류 발생:', error);
+        });
+
+
+</script>
+</body>
+</html>

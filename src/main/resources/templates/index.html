@@ -5,23 +5,120 @@
     <title>DoDo Express</title>
     <style>
 
-        .container {
-            display: flex;
-            justify-content: center;
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
             text-align: center;
         }
 
-        .container {
-            width: 500px;
+        .product img {
+            max-width: 100%;
+            height: auto;
         }
+
+        .product h2 {
+            font-size: 18px;
+        }
+
+        .product p {
+            font-size: 14px;
+        }
+
+        .product button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header').load('header.html');
+        });
+    </script>
 </head>
 <body>
-<iframe src="header.html" width="100%" height="200" frameborder="0"></iframe>
-<div class="container">
-    <a href="/list">회원목록</a>
-    <a href="/login">로그인</a>
-</div>
+<!-- HEADER -->
+<div th:insert="header.html" class="header"></div>
 
+<div id="header"></div>
+    <div>
+        <h1 style="display: flex; justify-content: center; align-items: center;">상품</h1>
+    </div>
+    <div class="container">
+        <div id="productList"></div>
+    </div>
+<script>
+
+    fetch('/api/prodList')
+        .then(response => response.json())
+        .then(productList => {
+            const productListElement = document.getElementById('productList');
+
+            productList.forEach(productData => {
+
+                const productElement = document.createElement('div');
+                productElement.classList.add('product');
+
+                const imgElement = document.createElement('img');
+                imgElement.src = productData.image;
+                productElement.appendChild(imgElement);
+
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = productData.name;
+                productElement.appendChild(titleElement);
+
+                const descriptionElement = document.createElement('p');
+                descriptionElement.textContent = productData.manual;
+                productElement.appendChild(descriptionElement);
+
+                const priceElement = document.createElement('p');
+
+                function addCommas(number) {
+                    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+                const formattedPrice = `가격: ￦${addCommas(productData.price)}`;
+                priceElement.textContent = formattedPrice;
+                productElement.appendChild(priceElement);
+
+                const addToCartButton = document.createElement('button');
+                addToCartButton.textContent = '장바구니에 담기';
+                addToCartButton.addEventListener('click', () => {
+                    fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({productId: productData.id}), // 상품 ID를 서버로 전송
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+                                alert('상품이 장바구니에 추가되었습니다.');
+                            } else {
+                                alert('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('상품을 장바구니에 추가하는 중 오류 발생:', error);
+                        });
+                });
+
+                productElement.appendChild(addToCartButton);
+
+                productListElement.appendChild(productElement);
+            });
+        })
+        .catch(error => {
+            console.error('상품 목록을 불러오는 중 오류 발생:', error);
+        });
+
+</script>
 </body>
 </HTML>

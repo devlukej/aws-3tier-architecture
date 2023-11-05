@@ -14,6 +14,7 @@ public class UserDto {
     private String username;
     private String password;
     private String nickname;
+    private int money;
     private LocalDateTime createAt;
 
 
@@ -23,6 +24,7 @@ public class UserDto {
                 .username(username)
                 .password(password)
                 .nickname(nickname)
+                .money(money)
                 .createdAt(createAt)
                 .build();
     }

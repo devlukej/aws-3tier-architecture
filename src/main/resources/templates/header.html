@@ -2,16 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DoDo Express</title>
+    <title>Title</title>
     <style>
-
-        body {
+        .header {
             display: flex;
             justify-content: center;
+            text-align: center;
+            width: 100%;
         }
+
         .title {
             margin: 0 20px;
         }
+
         .search {
             display: flex;
             justify-content: center;
@@ -19,20 +22,20 @@
             width: 50%;
             margin: 0 20px;
         }
+
         .size {
             width: 100%;
         }
+
         .search-btn {
             width: 30%;
         }
+
         .signup {
             margin: 0 20px;
         }
-        .signup-txt {
-            display: flex;
-            justify-content: center;
-        }
-        .bucket {
+
+        .cart {
             margin: 0 20px;
             display: flex;
             align-items: center;
@@ -40,20 +43,92 @@
     </style>
 </head>
 <body>
-<div class="title">
-    <H1>DoDo Express</H1>
+<div class="header">
+    <div class="title">
+        <H1>DoDo Express</H1>
+    </div>
+    <div class="search">
+        <input class="size" name="noticeTitle" id="keyword" type="text">
+        <button class="search-btn">검색</button>
+    </div>
+    <div class="signup" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div>
+            <span id="user-nickname"></span>
+        </div>
+        <div id="select" style="display: block">
+            <a href="/signup">회원가입</a>
+            <a href="/login">로그인</a>
+        </div>
+        <div id="money">
+            <span id="user-money"></span>
+        </div>
+        <div id="button">
+
+        </div>
+    </div>
+    <div class="cart">
+        <a href="/cart">장바구니</a>
+    </div>
 </div>
-<div class="search">
-    <input class="size" name="noticeTitle" id="keyword" type="text">
-    <button class="search-btn">검색</button>
-</div>
-<div class="signup">
-    <p class="signup-txt">환영합니다!</p>
-    <a href="/signup">회원가입</a>
-    <a href="/signup">로그인</a>
-</div>
-<div class="bucket">
-    <a href="/signup">장바구니</a>
-</div>
+<script>
+    fetch('/api/statusLogin')
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                console.error('사용자 정보를 불러오는 중 오류 발생');
+                return { authenticated: false };
+            }
+        })
+        .then(data => {
+            const userAuthenticated = data.authenticated;
+            const userNickname = data.nickname;
+            const userMoney = data.money;
+
+            function updateButtons(user) {
+                if (userAuthenticated) {
+                    document.getElementById('user-nickname').textContent = `환영합니다 ${userNickname}님 !`;
+                    const formattedUserMoney = userMoney.toLocaleString();
+                    document.getElementById('user-money').textContent = `보유 금액 : ￦${formattedUserMoney} `;
+                    document.getElementById('select').style.display = 'none';
+
+                    // 로그아웃 버튼을 추가
+                    const logoutButton = document.createElement('button');
+                    logoutButton.textContent = '로그아웃';
+                    logoutButton.addEventListener('click', () => {
+                        fetch('/api/logout', {
+                            method: 'POST'
+                        })
+                            .then(response => {
+                                if (response.status === 200) {
+                                    // 로그아웃 성공 시 페이지 새로고침
+                                    location.reload();
+                                } else {
+                                    console.error('로그아웃 중 오류 발생');
+                                }
+                            });
+                    });
+                    document.getElementById('button').appendChild(logoutButton);
+                } else {
+                    document.getElementById('user-nickname').textContent = '로그인이 필요합니다.';
+                    // 로그아웃 버튼 제거
+                    const logoutButton = document.querySelector('button');
+                    if (logoutButton) {
+                        logoutButton.remove();
+                    }
+                }
+            }
+
+            // 페이지 로드 시 버튼 업데이트
+            updateButtons(userAuthenticated);
+
+            // 만약 사용자 정보가 로그인 성공 시 반환되었다면, 해당 정보를 활용할 수 있습니다.
+            if (userAuthenticated) {
+                // user 객체는 서버로부터 받은 사용자 정보를 나타냅니다.
+                const user = data;
+                // user 객체를 활용하여 필요한 작업을 수행합니다.
+            }
+        });
+</script>
 </body>
 </html>

@@ -24,9 +24,17 @@ public class UserController {
         return "signup";
     }
 
-    @GetMapping("/list")
-    public String dispList() {
+    @GetMapping("/login")
+    public String dispLogin() {
 
-        return "list";
+        return "login";
     }
+
+    @GetMapping("/cart")
+    public String dispBucket() {
+
+        return "cart";
+    }
+
+
 }
