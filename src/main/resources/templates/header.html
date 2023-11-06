@@ -117,6 +117,31 @@
 
     updateUserInfo();
 
+    function updateUserInformation() {
+        fetch('/api/statusLogin')
+            .then(response => response.json())
+            .then(data => {
+                const userAuthenticated = data.authenticated;
+                const userNickname = data.nickname;
+                const userMoney = data.money;
+
+                if (userAuthenticated) {
+                    document.getElementById('user-nickname').textContent = `환영합니다 ${userNickname}님 !`;
+                    const formattedUserMoney = userMoney.toLocaleString();
+                    document.getElementById('user-money').textContent = `보유 금액 : ￦${formattedUserMoney} `;
+                    document.getElementById('select').style.display = 'none';
+                    document.getElementById('logout').style.display = 'block';
+                } else {
+                    document.getElementById('user-nickname').textContent = '로그인이 필요합니다.';
+                    document.getElementById('select').style.display = 'block';
+                    document.getElementById('logout').style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+            });
+    }
+
     // 로그아웃 버튼 클릭 이벤트 처리
     const logoutButton = document.getElementById('logout');
     logoutButton.addEventListener('click', () => {

@@ -92,22 +92,6 @@ public class RestUserController {
         return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/api/user/money")
-    public ResponseEntity<Map<String, Object>> getUserMoney(HttpSession session) {
-        Map<String, Object> status = new HashMap<>();
-
-        UserEntity user = (UserEntity) session.getAttribute("user");
-
-        if (user != null) {
-            status.put("authenticated", true);
-            status.put("money", user.getMoney());
-        } else {
-            status.put("authenticated", false);
-        }
-
-        return ResponseEntity.ok(status);
-    }
-
     @GetMapping("/api/prodList")
     public ResponseEntity<List<ProdDto>> getAllProducts() {
         List<ProdDto> prodDtoList = prodService.getAllProds();
