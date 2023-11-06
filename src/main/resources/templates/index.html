@@ -52,7 +52,7 @@
 <div>
     <h1 style="display: flex; justify-content: center; align-items: center;">상품</h1>
 </div>
-<div class="container">
+<div class="container" id="container">
     <div id="productList"></div>
 </div>
 <script>
@@ -119,6 +119,86 @@
         .catch(error => {
             console.error('상품 목록을 불러오는 중 오류 발생:', error);
         });
+
+    $(document).ready(function () {
+        // Header에서 검색 버튼을 클릭할 때 실행될 코드
+        $('#search-button').on('click', function () {
+            const searchKeyword = $('#search-input').val();
+            searchProducts(searchKeyword);
+        });
+    });
+
+    function searchProducts(keyword) {
+        const productListElement = document.getElementById('productList');
+
+        // 이전 결과를 모두 지우기
+        while (productListElement.firstChild) {
+            productListElement.removeChild(productListElement.firstChild);
+        }
+
+        fetch(`/api/search?keyword=${keyword}`)
+            .then(response => response.json())
+            .then(productList => {
+                const productListElement = document.getElementById('productList');
+
+                productList.forEach(productData => {
+
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = productData.image;
+                    productElement.appendChild(imgElement);
+
+                    const titleElement = document.createElement('h2');
+                    titleElement.textContent = productData.name;
+                    productElement.appendChild(titleElement);
+
+                    const descriptionElement = document.createElement('p');
+                    descriptionElement.textContent = productData.manual;
+                    productElement.appendChild(descriptionElement);
+
+                    const priceElement = document.createElement('p');
+
+                    function addCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    const formattedPrice = `가격: ￦${addCommas(productData.price)}`;
+                    priceElement.textContent = formattedPrice;
+                    productElement.appendChild(priceElement);
+
+                    const addToCartButton = document.createElement('button');
+                    addToCartButton.textContent = '장바구니에 담기';
+                    addToCartButton.addEventListener('click', () => {
+                        fetch('/api/cart/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({productId: productData.id}), // 상품 ID를 서버로 전송
+                        })
+                            .then(response => {
+                                if (response.status === 200) {
+                                    alert('상품이 장바구니에 추가되었습니다.');
+                                } else {
+                                    alert('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('상품을 장바구니에 추가하는 중 오류 발생:', error);
+                            });
+                    });
+
+                    productElement.appendChild(addToCartButton);
+
+                    productListElement.appendChild(productElement);
+                });
+            })
+            .catch(error => {
+                console.error('상품 목록을 불러오는 중 오류 발생:', error);
+            });
+    }
 
 </script>
 </body>
