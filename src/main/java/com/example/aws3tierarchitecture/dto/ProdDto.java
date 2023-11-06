@@ -6,7 +6,6 @@ import lombok.Data;
 
 
 @Data
-@Builder
 public class ProdDto {
 
     private Long id;
@@ -24,5 +23,14 @@ public class ProdDto {
                 .price(price)
                 .image(image)
                 .build();
+    }
+
+    @Builder
+    public ProdDto(Long id, String name, String manual, String image, int price) {
+        this.id = id;
+        this.name = name;
+        this.manual = manual;
+        this.image = image;
+        this.price = price;
     }
 }
