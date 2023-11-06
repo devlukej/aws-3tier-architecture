@@ -48,12 +48,13 @@
 <div th:insert="header.html" class="header"></div>
 
 <div id="header"></div>
-    <div>
-        <h1 style="display: flex; justify-content: center; align-items: center;">상품</h1>
-    </div>
-    <div class="container">
-        <div id="productList"></div>
-    </div>
+
+<div>
+    <h1 style="display: flex; justify-content: center; align-items: center;">상품</h1>
+</div>
+<div class="container">
+    <div id="productList"></div>
+</div>
 <script>
 
     fetch('/api/prodList')
