@@ -136,7 +136,7 @@
             productListElement.removeChild(productListElement.firstChild);
         }
 
-        fetch(`/api/search?keyword=${keyword}`)
+        fetch(`/api/search?keyword=${encodeURIComponent(searchKeyword)}`)
             .then(response => response.json())
             .then(productList => {
                 const productListElement = document.getElementById('productList');
