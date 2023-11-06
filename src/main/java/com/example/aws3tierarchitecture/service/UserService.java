@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
-    }
+    public UserEntity updateUserMoney(Long userId, int newMoney) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+        user.setMoney(newMoney);
+        return userRepository.save(user);
+    }
 }

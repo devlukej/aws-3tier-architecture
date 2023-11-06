@@ -4,23 +4,15 @@ import com.example.aws3tierarchitecture.domain.entity.UserEntity;
 import com.example.aws3tierarchitecture.domain.repository.UserRepository;
 import com.example.aws3tierarchitecture.dto.CartDto;
 import com.example.aws3tierarchitecture.dto.ProdDto;
-import com.example.aws3tierarchitecture.dto.UserDto;
 import com.example.aws3tierarchitecture.service.CartService;
 import com.example.aws3tierarchitecture.service.ProdService;
 import com.example.aws3tierarchitecture.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +25,6 @@ public class RestUserController {
     private final UserService userService;
 
     private final ProdService prodService;
-
     private final CartService cartService;
     private final UserRepository userRepository;
 
@@ -101,6 +92,22 @@ public class RestUserController {
         return ResponseEntity.ok(status);
     }
 
+    @GetMapping("/api/user/money")
+    public ResponseEntity<Map<String, Object>> getUserMoney(HttpSession session) {
+        Map<String, Object> status = new HashMap<>();
+
+        UserEntity user = (UserEntity) session.getAttribute("user");
+
+        if (user != null) {
+            status.put("authenticated", true);
+            status.put("money", user.getMoney());
+        } else {
+            status.put("authenticated", false);
+        }
+
+        return ResponseEntity.ok(status);
+    }
+
     @GetMapping("/api/prodList")
     public ResponseEntity<List<ProdDto>> getAllProducts() {
         List<ProdDto> prodDtoList = prodService.getAllProds();
@@ -109,6 +116,7 @@ public class RestUserController {
 
     @GetMapping("/api/cart/all")
     public List<CartDto> getAllCarts(HttpSession session) {
+
         UserEntity user = (UserEntity) session.getAttribute("user");
 
         return cartService.getAllCartsByUserId(user.getId());
@@ -126,6 +134,29 @@ public class RestUserController {
     @DeleteMapping("/api/cart/remove/{cartId}")
     public void removeFromCart(@PathVariable Long cartId) {
         cartService.removeFromCart(cartId);
+    }
+
+    @PostMapping("/api/purchase")
+    public ResponseEntity<String> purchaseItems(@RequestBody List<Long> itemIds, HttpSession session) {
+        UserEntity user = (UserEntity) session.getAttribute("user");
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+        }
+
+        int totalAmount = cartService.calculateTotalAmount(itemIds); // 상품 가격의 합계 계산
+
+        if (user.getMoney() < totalAmount) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient funds.");
+        }
+
+        // 상품 가격을 사용자의 돈에서 차감
+        int newMoney = user.getMoney() - totalAmount;
+        userService.updateUserMoney(user.getId(), newMoney);
+
+        // 여기에서 상품을 실제로 제거하는 로직을 추가
+
+        return ResponseEntity.ok("Purchase successful.");
     }
 
 }

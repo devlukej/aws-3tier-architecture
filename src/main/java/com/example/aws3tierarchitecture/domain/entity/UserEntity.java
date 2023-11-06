@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
@@ -25,7 +25,6 @@ public class UserEntity implements Serializable {
     private String username;
     private String password;
     private String nickname;
-
     private int money;
     private LocalDateTime createdAt;
 

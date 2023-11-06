@@ -72,4 +72,16 @@ public class CartService {
     public void removeFromCart(Long cartId) {
         cartRepository.deleteById(cartId);
     }
+
+    public int calculateTotalAmount(List<Long> itemIds) {
+        List<CartEntity> cartItems = cartRepository.findAllByIdIn(itemIds); // 아이템 ID 목록에 해당하는 카트 엔터티 조회
+        int totalAmount = 0;
+
+        for (CartEntity cartItem : cartItems) {
+            totalAmount += cartItem.getProduct().getPrice() * cartItem.getCount(); // 각 아이템의 가격과 수량을 사용하여 합계를 계산
+        }
+
+
+        return totalAmount;
+    }
 }
