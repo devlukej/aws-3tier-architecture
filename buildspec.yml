@@ -17,7 +17,7 @@ phases:
       - pwd
 cache:
   paths:
-    - './aws-3tier-architecture/.gradle/**/*'
-    - './dodo-development-bucket/cache/**/*'
+    - 'aws-3tier-architecture/.gradle/**/*'
+    - 'dodo-development-bucket/cache/**/*'
 artifacts:
   files: build/libs/*.jar
