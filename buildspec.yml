@@ -17,6 +17,6 @@ phases:
       - pwd
 cache:
   path:
-    - './.gradle/**/*'
+    - 'aws-3tier-architecture/.gradle/**/*'
 artifacts:
   files: build/libs/*.jar
