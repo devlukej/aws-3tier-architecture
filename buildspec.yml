@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - echo "Install phase"
+  pre_build:
+    commands:
+      - echo "build phase"
+  build:
+    commands:
+      - chmod +x gradlew
+      - ./gradlew build
+artifacts:
+  files: build/libs/*.jar
