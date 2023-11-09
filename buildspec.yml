@@ -17,6 +17,6 @@ phases:
       - pwd
 cache:
   paths:
-    - '/root/.gradle/**/*'
+    - '/root/.gradle/caches/**/*'
 artifacts:
   files: build/libs/*.jar
