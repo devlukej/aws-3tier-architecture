@@ -16,9 +16,8 @@ phases:
       - echo $(basename ./build/libs/*.jar)
       - pwd
 cache:
-  path:
-    - 'aws-3tier-architecture/.gradle/**/*'
   paths:
-    - 'dodo-development-bucket/cache'
+    - './aws-3tier-architecture/.gradle/**/*'
+    - './dodo-development-bucket/cache/**/*'
 artifacts:
   files: build/libs/*.jar
