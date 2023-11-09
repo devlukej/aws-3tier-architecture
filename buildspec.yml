@@ -18,5 +18,7 @@ phases:
 cache:
   path:
     - 'aws-3tier-architecture/.gradle/**/*'
+  paths:
+    - 'dodo-development-bucket/cache'
 artifacts:
   files: build/libs/*.jar
