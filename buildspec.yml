@@ -17,7 +17,6 @@ phases:
       - pwd
 cache:
   paths:
-    # - '/root/.gradle/**/*' # 캐싱파일 용량이 300MB 되고 느리다
-    - '/root/.gradle/caches/**/*' # 캐싱파일 용량이 70mb 되고 빠르다
+    - '/root/.gradle/caches/**/*'
 artifacts:
   files: build/libs/*.jar
