@@ -27,6 +27,8 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.session:spring-session-data-redis'
 
 
 	implementation 'org.projectlombok:lombok:1.18.26'

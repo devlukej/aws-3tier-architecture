@@ -10,6 +10,9 @@ import com.example.aws3tierarchitecture.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.session.Session;
+import org.springframework.session.data.redis.RedisIndexedSessionRepository;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -22,6 +25,7 @@ import java.util.Map;
 @RestController
 public class RestUserController {
 
+    private final RedisIndexedSessionRepository sessionRepository;
     private final UserService userService;
 
     private final ProdService prodService;
@@ -29,7 +33,8 @@ public class RestUserController {
     private final UserRepository userRepository;
 
     @Autowired
-    public RestUserController(UserService userService, UserRepository userRepository, ProdService prodService,CartService cartService) {
+    public RestUserController(RedisIndexedSessionRepository sessionRepository, UserService userService, UserRepository userRepository, ProdService prodService, CartService cartService) {
+        this.sessionRepository = sessionRepository;
         this.userService = userService;
         this.userRepository = userRepository;
         this.prodService = prodService;
@@ -76,15 +81,23 @@ public class RestUserController {
     }
 
     @GetMapping("/api/statusLogin")
-    public ResponseEntity<Map<String, Object>> getStatusLogin(HttpSession session) {
+    public ResponseEntity<Map<String, Object>> getStatusLogin(HttpSession httpSession) {
         Map<String, Object> status = new HashMap<>();
 
-        UserEntity user = (UserEntity) session.getAttribute("user");
+        // Spring Session을 통해 세션에서 사용자 정보를 가져옴
+        String sessionId = httpSession.getId();
+        Session session = sessionRepository.findById(sessionId);
 
-        if (user != null) {
-            status.put("authenticated", true);
-            status.put("nickname", user.getNickname()); // 현재 사용자의 닉네임을 가져오도록 수정
-            status.put("money", user.getMoney());
+        if (session != null) {
+            UserEntity user = (UserEntity) session.getAttribute("user");
+
+            if (user != null) {
+                status.put("authenticated", true);
+                status.put("nickname", user.getNickname()); // 현재 사용자의 닉네임을 가져오도록 수정
+                status.put("money", user.getMoney());
+            } else {
+                status.put("authenticated", false);
+            }
         } else {
             status.put("authenticated", false);
         }

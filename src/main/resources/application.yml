@@ -31,7 +31,9 @@ spring:
     h2:
       console:
         enabled: true
-
+  redis:
+    host: clustercfg.dodo-elasticache.lfzb9z.apne1.cache.amazonaws.com
+    port: 6379
 server:
   port: 8080
   address: 0.0.0.0
