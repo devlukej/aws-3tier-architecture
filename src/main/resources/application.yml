@@ -6,8 +6,8 @@ spring:
     cache: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://dodo-mysql.cet6jusu056s.ap-northeast-1.rds.amazonaws.com:3306/dodo
-    username: admin
+    url: jdbc:mysql://dodo-mysql-rds.cet6jusu056s.ap-northeast-1.rds.amazonaws.com:3306/dodo
+    username: dodo
     password: anwkdrhdql
   mvc:
     hiddenmethod:
@@ -31,9 +31,6 @@ spring:
     h2:
       console:
         enabled: true
-  redis:
-    host: clustercfg.dodo-elasticache.lfzb9z.apne1.cache.amazonaws.com
-    port: 6379
 server:
   port: 8080
   address: 0.0.0.0
