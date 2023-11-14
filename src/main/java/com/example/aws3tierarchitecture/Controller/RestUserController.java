@@ -10,9 +10,6 @@ import com.example.aws3tierarchitecture.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.session.Session;
-import org.springframework.session.data.redis.RedisIndexedSessionRepository;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,6 +21,7 @@ import java.util.Map;
 
 @RestController
 public class RestUserController {
+
     private final UserService userService;
 
     private final ProdService prodService;
@@ -31,7 +29,7 @@ public class RestUserController {
     private final UserRepository userRepository;
 
     @Autowired
-    public RestUserController(UserService userService, UserRepository userRepository, ProdService prodService, CartService cartService) {
+    public RestUserController(UserService userService, UserRepository userRepository, ProdService prodService,CartService cartService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.prodService = prodService;
