@@ -5,6 +5,7 @@ import com.example.aws3tierarchitecture.domain.repository.ProdRepository;
 import com.example.aws3tierarchitecture.dto.ProdDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,27 @@ public class ProdService {
                     .manual(product.getManual())
                     .price(product.getPrice())
                     .image(product.getImage())
+                    .build();
+            productDtos.add(productDto);
+        }
+
+        return productDtos;
+    }
+
+    @Transactional
+    public List<ProdDto> searchName(String name) {
+
+        List<ProdEntity> prodEntities = prodRepository.findByNameContaining(name);
+
+        List<ProdDto> productDtos = new ArrayList<>();
+
+        for (ProdEntity prodEntitie : prodEntities) {
+            ProdDto productDto = ProdDto.builder()
+                    .id(prodEntitie.getId())
+                    .name(prodEntitie.getName())
+                    .manual(prodEntitie.getManual())
+                    .price(prodEntitie.getPrice())
+                    .image(prodEntitie.getImage())
                     .build();
             productDtos.add(productDto);
         }

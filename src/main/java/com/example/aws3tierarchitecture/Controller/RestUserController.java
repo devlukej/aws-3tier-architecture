@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -141,6 +142,17 @@ public class RestUserController {
         // 여기에서 상품을 실제로 제거하는 로직을 추가
 
         return ResponseEntity.ok("Purchase successful.");
+    }
+
+    @GetMapping("/api/search")
+    public ResponseEntity<List<ProdDto>> getAllProducts(@RequestParam("keyword") String keyword) {
+        if (Objects.equals(keyword, "")) {
+            List<ProdDto> prodDtoList = prodService.getAllProds();
+            return ResponseEntity.ok(prodDtoList);
+        } else {
+            List<ProdDto> prodList = prodService.searchName(keyword);
+            return ResponseEntity.ok(prodList);
+        }
     }
 
 }
