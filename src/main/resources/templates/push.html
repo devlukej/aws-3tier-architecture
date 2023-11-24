@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack 메시지 전송</title>
+</head>
+<body>
+<h1>Slack 메시지 전송</h1>
+
+<form id="slackForm">
+    <label for="channel">채널:</label>
+    <input type="text" id="channel" name="channel" required>
+
+    <label for="message">메시지:</label>
+    <input type="text" id="message" name="message" required>
+
+    <button type="button" onclick="sendMessage()">메시지 전송</button>
+</form>
+
+<script>
+    function sendMessage() {
+        var channel = document.getElementById("channel").value;
+        var message = document.getElementById("message").value;
+
+        if (!channel) {
+            alert('채널을 입력해주세요.');
+            return;
+        }
+
+        var requestData = {
+            channel: channel,
+            text: message
+        };
+
+        fetch('/slack/send-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Content-Type을 application/json으로 설정
+            },
+            body: JSON.stringify(requestData) // 데이터를 JSON 문자열로 변환
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text(); // response를 text로 읽어옴
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Slack 메시지가 성공적으로 전송되었습니다.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Slack 메시지 전송에 실패했습니다. 오류 메시지를 확인하세요: ' + error.message);
+            });
+    }
+</script>
+
+
+</body>
+</html>

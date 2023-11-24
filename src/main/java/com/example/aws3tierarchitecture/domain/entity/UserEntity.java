@@ -2,7 +2,8 @@ package com.example.aws3tierarchitecture.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,26 +26,33 @@ public class UserEntity implements Serializable {
     private String username;
     private String password;
     private String nickname;
+    private String state;
     private int money;
-    private LocalDateTime createdAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<CartEntity> carts;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now(); // 엔티티가 저장되기 전에 생성 날짜 설정
-    }
-
     @Builder
-    public UserEntity(Long id, String username, String password, String nickname, LocalDateTime createdAt, int money) {
+    public UserEntity(Long id, String username, String password, String nickname, String state, int money) {
         this.id = id;
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
         this.username = username;
         this.nickname = nickname;
+        this.state = state;
         this.money = money;
-        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", money=" + money +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", state'" + state + '\'' +
+                '}';
     }
 
 }

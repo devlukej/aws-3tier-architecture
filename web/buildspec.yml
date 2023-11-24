@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Build phase starting on $(date)"
+artifacts:
+  files:
+  - src/main/resources/templates/**/*
+  - web/appspec.yml
+  - web/scripts/**
+  discard-paths: yes

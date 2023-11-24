@@ -14,8 +14,8 @@ public class UserDto {
     private String username;
     private String password;
     private String nickname;
+    private String state;
     private int money;
-    private LocalDateTime createAt;
 
 
     public UserEntity toEntity() {
@@ -24,8 +24,8 @@ public class UserDto {
                 .username(username)
                 .password(password)
                 .nickname(nickname)
+                .state(state)
                 .money(money)
-                .createdAt(createAt)
                 .build();
     }
 }

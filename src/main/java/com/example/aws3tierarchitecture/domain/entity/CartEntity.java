@@ -19,7 +19,7 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -48,6 +48,16 @@ public class CartEntity {
                 .price(this.product.getPrice())
                 .count(this.count)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "CartEntity{" +
+                "id=" + id +
+                ", count=" + count +
+                ", product=" + product + // Assuming there is a 'ProductEntity' field in CartEntity
+                ", user=" + user +
+                '}';
     }
 
 

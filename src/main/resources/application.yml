@@ -4,6 +4,22 @@ spring:
     suffix: .html
     mode: HTML5
     cache: false
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+      flush-mode: on_save
+  redis:
+    cluster:
+      nodes: dodo-dev-elasticache-0001-001.lfzb9z.0001.apne1.cache.amazonaws.com:6379, dodo-dev-elasticache-0001-002.lfzb9z.0001.apne1.cache.amazonaws.com:6379, dodo-dev-elasticache-0001-003.lfzb9z.0001.apne1.cache.amazonaws.com:6379,
+        dodo-dev-elasticache-0002-001.lfzb9z.0001.apne1.cache.amazonaws.com:6379, dodo-dev-elasticache-0002-002.lfzb9z.0001.apne1.cache.amazonaws.com:6379, dodo-dev-elasticache-0002-003.lfzb9z.0001.apne1.cache.amazonaws.com:6379,
+        dodo-dev-elasticache-0003-001.lfzb9z.0001.apne1.cache.amazonaws.com:6379
+    host: dodo-dev-elasticache.lfzb9z.clustercfg.apne1.cache.amazonaws.com
+    port: 6379
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://dodo-mysql-rds.cet6jusu056s.ap-northeast-1.rds.amazonaws.com:3306/dodo
@@ -31,6 +47,9 @@ spring:
     h2:
       console:
         enabled: true
+  redis:
+    host: clustercfg.dodo-elasticache.lfzb9z.apne1.cache.amazonaws.com
+    port: 6379
 server:
   port: 8080
   address: 0.0.0.0

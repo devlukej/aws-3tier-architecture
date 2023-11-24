@@ -21,6 +21,6 @@ cache:
 artifacts:
   files:
   - build/libs/*.jar
-  - appspec.yml
-  - scripts/**
+  - was/appspec.yml
+  - was/scripts/**
   discard-paths: yes
