@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source:  /
+    destination: /home/dodo_admin/dodo/
+permissions:
+  - object: /
+    pattern: "**"
+    owner: dodo_admin
+    group: dodo
+hooks:
+  ApplicationStart:
+    - location: scripts/deploy.sh
+      timeout: 60
+      runas: dodo_admin
