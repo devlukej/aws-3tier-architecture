@@ -64,6 +64,8 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        user.setState("0");
+
         // 사용자 저장
         userRepository.save(user);
 

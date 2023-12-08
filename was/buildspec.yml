@@ -6,14 +6,20 @@ phases:
       java: corretto17
     commands:
       - echo "Install phase"
+  pre_build:
+    commands:
+      - export SSM_DB_ENDPOINT=$(aws ssm get-parameter --name /dodo/db-endpoint --with-decryption --query Parameter.Value --output text)
+      - export SSM_DB_ID=$(aws ssm get-parameter --name /dodo/db-id --with-decryption --query Parameter.Value --output text)
+      - export SSM_DB_PW=$(aws ssm get-parameter --name /dodo/db-pw --with-decryption --query Parameter.Value --output text)
+      - export SSM_REDIS_ENDPOINT=$(aws ssm get-parameter --name /dodo/redis-endpoint --with-decryption --query Parameter.Value --output text)
   build:
     commands:
-      - echo build Starting on 'date'
+      - echo "Build starting on $(TZ=Asia/Seoul date)"
       - chmod +x gradlew
       - ./gradlew build
   post_build:
-    commnds:
-      - echo $(basename ./build/libs/*.jar)
+    commands:
+      - echo $(basename ./build/libs/*-SNAPSHOT.jar)
       - pwd
 cache:
   paths:

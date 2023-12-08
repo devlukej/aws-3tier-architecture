@@ -2,14 +2,14 @@ version: 0.0
 os: linux
 files:
   - source:  /
-    destination: /home/ec2-user/
+    destination: /home/dodo_admin/
 permissions:
   - object: /
     pattern: "**"
-    owner: ec2-user
-    group: ec2-user
+    owner: dodo_admin
+    group: dodo
 hooks:
   ApplicationStart:
     - location: deploy.sh
       timeout: 60
-      runas: ec2-user
+      runas: dodo_admin

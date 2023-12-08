@@ -4,9 +4,8 @@ phases:
   build:
     commands:
       - echo "Build phase starting on $(date)"
+      - mkdir -p /dodo
+      - mv * /dodo/
 artifacts:
   files:
-  - src/main/resources/templates/**/*
-  - web/appspec.yml
-  - web/scripts/**
-  discard-paths: yes
+  - '/dodo/**/*'

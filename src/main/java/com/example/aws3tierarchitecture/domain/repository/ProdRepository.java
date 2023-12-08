@@ -10,5 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProdRepository extends JpaRepository<ProdEntity, Long> {
+
     List<ProdEntity> findByNameContaining(String name);
+
 }
